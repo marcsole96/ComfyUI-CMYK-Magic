@@ -17,7 +17,7 @@ import torch
 import torch.nn.functional as F
 
 
-PREVIEW_MAX = 288          # long side, px — small enough to feel instant
+PREVIEW_MAX = 288          # long side, px, small enough to feel instant
 THUMB_MAX = 132            # preset gallery thumbnail, px
 _CACHE_MAX = 24            # node thumbnails to keep
 
@@ -50,7 +50,7 @@ def remember_input(node_id, image):
 
 def _test_card():
     """Stand-in subject: skin tones, the comic primaries, a tonal ramp and a
-    dark mass — enough for every control to visibly do something."""
+    dark mass, enough for every control to visibly do something."""
     h = w = 224
     yy = torch.linspace(0, 1, h).view(h, 1).expand(h, w)
     xx = torch.linspace(0, 1, w).view(1, w).expand(h, w)
@@ -117,7 +117,7 @@ def render_thumb(name, presets, resolve, run):
 def render_png(node_id, params, resolve, run):
     """Run the engine on the preview thumbnail.
 
-    Returns (png_bytes, is_own, preset) — the preset name matters when a
+    Returns (png_bytes, is_own, preset), the preset name matters when a
     shuffle shortlist is active, so the panel can say which one was drawn.
     """
     from PIL import Image

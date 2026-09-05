@@ -93,7 +93,7 @@ function drawFan(ctx, w, h, invert) {
     }
 }
 
-/** Lattice of shapes on a rotated grid — dots, ellipses or squares. */
+/** Lattice of shapes on a rotated grid, dots, ellipses or squares. */
 function drawLattice(ctx, w, h, shape) {
     ctx.fillStyle = PAPER;
     ctx.fillRect(0, 0, w, h);
@@ -216,7 +216,7 @@ function drawPreview(cv, id) {
     }
 }
 
-/** Overlapping C/M/Y discs — the rosette a four-colour press makes. */
+/** Overlapping C/M/Y discs, the rosette a four-colour press makes. */
 function drawRosette(cv) {
     const ctx = cv.getContext("2d");
     const w = cv.width, h = cv.height, r = Math.min(w, h) * 0.30;
@@ -434,7 +434,7 @@ function buildPanel(node) {
     const setHelp = (label, key) => {
         const text = META.help?.[key];
         helpTitle.textContent = label;
-        helpBody.textContent = text || "—";
+        helpBody.textContent = text || ", ";
     };
     const clearHelp = () => {
         helpTitle.textContent = "help";
@@ -463,7 +463,7 @@ function buildPanel(node) {
     right.addEventListener("wheel", (e) => e.stopPropagation(), { passive: true });
 
     // Collapsing sections should actually shrink the node, so the panel is
-    // only as tall as what you have open — capped, then it scrolls.
+    // only as tall as what you have open, capped, then it scrolls.
     let fitTimer = null;
     // Measure the children, not the scroll box: scrollHeight can never report
     // less than the container we are sizing, so reading it would pin the node
@@ -848,8 +848,8 @@ function buildPanel(node) {
         };
         helpOn(lab, label, name);
         helpOn(range, label, name);
-        helpOn(dice, label + " — dice", "dice");
-        helpOn(rndRow, label + " — range", "dice_range");
+        helpOn(dice, label + ", dice", "dice");
+        helpOn(rndRow, label + ", range", "dice_range");
 
         parent.appendChild(row);
         parent.appendChild(rndRow);

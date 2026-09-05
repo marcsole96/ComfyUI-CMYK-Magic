@@ -132,6 +132,30 @@ def make_grid(panels, title, subtitle, panel_width, cols=None):
     return canvas
 
 
+def ink_name(rgb):
+    """A rough colour name for a plate label. Print inks cluster tightly enough
+    around the process hues that this reads correctly in practice."""
+    r, g, b = [c / 255.0 if c > 1 else c for c in rgb]
+    mx, mn = max(r, g, b), min(r, g, b)
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    if lum < 0.22:
+        return "black"
+    if mx - mn < 0.12:
+        return "grey" if lum < 0.85 else "white"
+    if mx == r:
+        h = (60 * ((g - b) / (mx - mn))) % 360
+    elif mx == g:
+        h = 60 * (2 + (b - r) / (mx - mn))
+    else:
+        h = 60 * (4 + (r - g) / (mx - mn))
+    for lo, hi, name in ((20, 45, "orange"), (45, 70, "yellow"), (70, 160, "green"),
+                         (160, 200, "cyan"), (200, 260, "blue"),
+                         (260, 345, "magenta")):
+        if lo <= h < hi:
+            return name
+    return "red"
+
+
 def save(im, out_dir, stem, ext):
     path = os.path.join(out_dir, f"{stem}.{ext}")
     if ext == "jpg":
@@ -145,6 +169,11 @@ def save(im, out_dir, stem, ext):
 # --------------------------------------------------------------------------
 # What to render
 # --------------------------------------------------------------------------
+
+# Documentation images get a coarser screen than you would normally print at.
+# The default scale of 60 is fine press: at README width those dots are a pixel
+# or two and the whole point of the node becomes invisible.
+SHOW_SCALE = 320
 
 # A dozen of the 37 presets, chosen to span the families rather than to be a
 # catalogue: newsprint, the three comic eras, poster stock, and the odd ones.
@@ -165,39 +194,39 @@ PATTERNS_SHOWN = [
 SWEEPS = [
     dict(stem="scale", title="scale",
          sub="Halftone pattern size. Low is fine press, high is giant pop-art. Default 60.",
-         base={}, key="scale", values=[20, 60, 150, 350]),
+         base={}, key="scale", values=[30, 90, 200, 400]),
 
     dict(stem="roughness", title="roughness",
          sub="Distresses the screen from a clean press run to worn analog. Default 20.",
-         base=dict(scale=120), key="roughness", values=[0, 30, 65, 100]),
+         base=dict(scale=SHOW_SCALE), key="roughness", values=[0, 30, 65, 100]),
 
     dict(stem="ink_multiply", title="ink_multiply",
          sub="0 is opaque paint that hides what is under it, 100 is pure multiply where every overlap darkens. Real ink sits in between. Default 60.",
-         base=dict(scale=120), key="ink_multiply", values=[0, 40, 70, 100]),
+         base=dict(scale=SHOW_SCALE), key="ink_multiply", values=[0, 40, 70, 100]),
 
     dict(stem="dot_gain", title="dot_gain",
          sub="Ink spread on absorbent stock: a called tint prints heavier than the film says. 0 is a calibrated press, 100 is newsprint letterpress. Default 35.",
-         base=dict(scale=120), key="dot_gain", values=[0, 35, 70, 100]),
+         base=dict(scale=SHOW_SCALE), key="dot_gain", values=[0, 35, 70, 100]),
 
     dict(stem="ink_fade", title="ink_fade",
          sub="Worn, mottled ink density, as if the press was running low. Default 10.",
-         base=dict(scale=120), key="ink_fade", values=[0, 30, 60, 100]),
+         base=dict(scale=SHOW_SCALE), key="ink_fade", values=[0, 30, 60, 100]),
 
     dict(stem="plate_drift", title="plate_drift",
          sub="Per-ink misregistration in pixels: the plates do not line up, exactly like cheap colour printing. Default 1.5.",
-         base=dict(scale=120), key="plate_drift", values=[0, 3, 10, 25], crop=0.45),
+         base=dict(scale=SHOW_SCALE), key="plate_drift", values=[0, 3, 10, 25], crop=0.45),
 
     dict(stem="contrast", title="contrast",
          sub="Pre-grade applied before separation, so it changes which inks get called for rather than just the final look. Default 0.",
-         base=dict(scale=120), key="contrast", values=[-60, -20, 20, 60]),
+         base=dict(scale=SHOW_SCALE), key="contrast", values=[-60, -20, 20, 60]),
 
     dict(stem="offset_angles", title="offset_angles",
          sub="Screen-angle step between successive inks. Real presses use offsets like this to stop the plates forming a moire. Default 60.",
-         base=dict(scale=120), key="offset_angles", values=[0, 15, 45, 90], crop=0.45),
+         base=dict(scale=SHOW_SCALE), key="offset_angles", values=[0, 15, 45, 90], crop=0.45),
 
     dict(stem="rotate", title="rotate",
          sub="Rotates the whole screen set at once, keeping the relative angles between inks. Default 0.",
-         base=dict(scale=120), key="rotate", values=[0, 15, 30, 45], crop=0.45),
+         base=dict(scale=SHOW_SCALE), key="rotate", values=[0, 15, 30, 45], crop=0.45),
 ]
 
 
@@ -207,8 +236,8 @@ def main():
     ap.add_argument("source", nargs="?")
     ap.add_argument("--out", default=os.path.join(HERE, "images"))
     ap.add_argument("--only")
-    ap.add_argument("--width", type=int, default=300)
-    ap.add_argument("--max-side", type=int, default=512)
+    ap.add_argument("--width", type=int, default=380)
+    ap.add_argument("--max-side", type=int, default=768)
     ap.add_argument("--ext", choices=["jpg", "png"], default="jpg")
     ap.add_argument("--comfy", default=r"D:\AIstuff\ComfyUI_v2\ComfyUI",
                     help="ComfyUI root (needed for comfy.model_management)")
@@ -216,8 +245,8 @@ def main():
     args = ap.parse_args()
 
     names = ["source", "presets", "patterns"] + [s["stem"] for s in SWEEPS] + \
-            ["plate_render", "tint_quantize", "random_shuffle", "random_pattern",
-             "random_inks"]
+            ["plate_render", "tint_quantize", "benday_plates", "benday_rosette",
+             "benday_eras", "random_shuffle", "random_pattern", "random_inks"]
     if args.list:
         for n in names:
             print(" ", n)
@@ -244,11 +273,17 @@ def main():
     image = load_image(args.source, args.max_side)
     print(f"source: {args.source} -> {tuple(image.shape[1:3])}")
 
-    def run(**over):
+    def run_full(**over):
+        """Returns (composite, plates, resolved). `plates` is one image per ink,
+        each on white, which is the node's own separation output."""
         params = dict(DEFAULTS)
         params.update(over)
-        result, _plates = run_resolved(image, resolve_settings(params))
-        return to_pil(result)
+        resolved = resolve_settings(params)
+        result, plates = run_resolved(image, resolved)
+        return result, plates, resolved
+
+    def run(**over):
+        return to_pil(run_full(**over)[0])
 
     want = lambda n: (not args.only) or args.only == n
 
@@ -259,13 +294,13 @@ def main():
         panels = [(n, run(preset=n)) for n in PRESETS_SHOWN]
         save(make_grid(panels, "presets",
                        f"Twelve of the {len(cm.MAGIC_PRESETS)} built-in presets. A preset writes every setting at once, including the ink set, the paper colour and the per-ink screen angles, not just the sliders you can see.",
-                       args.width, cols=4), args.out, "presets", args.ext)
+                       args.width, cols=3), args.out, "presets", args.ext)
 
     if want("patterns"):
-        panels = [(n, run(pattern=n, scale=120)) for n in PATTERNS_SHOWN]
+        panels = [(n, run(pattern=n, scale=SHOW_SCALE)) for n in PATTERNS_SHOWN]
         save(make_grid(panels, "pattern",
-                       "Twelve of the 17 screen patterns, all at the same scale so only the pattern differs. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
-                       args.width, cols=4), args.out, "patterns", args.ext)
+                       "Twelve of the 17 screen patterns, all at the same coarse scale so the screen itself is legible on a web page. At the default scale of 60 these are fine print and you would need to zoom in. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
+                       args.width, cols=3), args.out, "patterns", args.ext)
 
     for s in SWEEPS:
         if not want(s["stem"]):
@@ -280,7 +315,7 @@ def main():
              args.out, s["stem"], args.ext)
 
     if want("plate_render"):
-        panels = [(v, run(plate_render=v, scale=120, tint_quantize="25/50"))
+        panels = [(v, run(plate_render=v, scale=SHOW_SCALE, tint_quantize="25/50"))
                   for v in ("uniform", "benday")]
         save(make_grid(panels, "plate_render",
                        "uniform screens every plate the same way. benday makes each plate carry several screens at once like a real Ben-Day plate: light tints as dots, deep tints as a line sheet, 100 percent as unscreened solid. Shown with tint_quantize at 25/50.",
@@ -288,7 +323,7 @@ def main():
 
     if want("tint_quantize"):
         vals = ["off", "25/50", "25/50/75", "10/20/50/70"]
-        panels = [(v, run(tint_quantize=v, scale=120)) for v in vals]
+        panels = [(v, run(tint_quantize=v, scale=SHOW_SCALE)) for v in vals]
         save(make_grid(panels, "tint_quantize",
                        "Snaps every plate to the tint percentages a colourist could actually call for. 25/50 is the Craftint and Silver Age acetate system, four levels across three primaries, which is where the classic 64-colour comic palette comes from. Flat stepped fields, no gradients.",
                        args.width), args.out, "tint_quantize", args.ext)
@@ -307,7 +342,7 @@ def main():
                        args.width), args.out, "random_shuffle", args.ext)
 
     if want("random_pattern"):
-        panels = [(f"seed {sd}", run(pattern="random", scale=120, seed=sd))
+        panels = [(f"seed {sd}", run(pattern="random", scale=SHOW_SCALE, seed=sd))
                   for sd in (1, 2, 3, 4)]
         save(make_grid(panels, "pattern = random",
                        "Setting the pattern widget to random draws a fresh screen from the seed each run. solid is excluded from the pool, because a flat ink field reads as a bug rather than variety.",
@@ -316,11 +351,57 @@ def main():
     if want("random_inks"):
         cfg = json.loads(cm._DEFAULT_CFG)
         cfg["randomize"] = {"palette": True, "background": True}
-        panels = [(f"seed {sd}", run(ink_config=json.dumps(cfg), scale=120, seed=sd))
+        panels = [(f"seed {sd}", run(ink_config=json.dumps(cfg), scale=SHOW_SCALE, seed=sd))
                   for sd in (1, 2, 3, 4)]
         save(make_grid(panels, "Random per run: Inks + Paper",
                        f"Ticking Inks draws a whole ink set from the {len(cm.PALETTES)} built-in palettes; ticking Paper takes that palette's paper colour with it. Because the draw is a real palette rather than arbitrary RGB, a rolled result is always print-plausible.",
                        args.width), args.out, "random_inks", args.ext)
+
+    # ---- why this reproduces the real Ben-Day process ---------------
+    if want("benday_plates"):
+        composite, plates, resolved = run_full(preset="Golden Age Comic")
+        panels = []
+        for i, ink in enumerate(resolved["inks"]):
+            ang = ink.get("angle")
+            label = ink_name(ink["rgb"]) + (f"  {ang:g}°" if ang else "")
+            panels.append((label, to_pil(plates[i:i + 1])))
+        panels.append(("composite", to_pil(composite)))
+        save(make_grid(panels, "One plate per ink",
+                       "The node's second output is the separation itself: every ink on its own plate, screened at its own angle, exactly as it would go to press. This is Golden Age Comic, whose four plates carry the Craftint angle set. Stack them in print order and you get the panel on the right.",
+                       args.width, cols=len(panels)),
+             args.out, "benday_plates", args.ext)
+
+    if want("benday_rosette"):
+        panels = []
+        for v, note in ((0, "0, every plate aligned"), (15, "15"),
+                        (30, "30"), (60, "60, the default")):
+            # No preset here on purpose: most presets pin an absolute angle per
+            # ink, and a per-ink angle overrides offset_angles completely, so a
+            # preset would show no difference across this sweep at all.
+            panels.append((f"offset_angles = {note}",
+                           # A rosette is an interference pattern between dot
+                           # grids, so it needs many dots in frame. This is the
+                           # one strip that wants a finer screen, not a coarser
+                           # one.
+                           center_crop(run(offset_angles=v, scale=90,
+                                           plate_drift=0, dot_gain=20), 0.4)))
+        save(make_grid(panels, "Why the screen angles matter",
+                       "Give every plate the same angle and the dots stack on top of each other into a coarse, blotchy moire. Offset them and the overlaps scatter into the rosette that real four-colour printing produces. This is the whole reason presses bothered with angle sets. Rendered with the default ink set, because a preset that pins an absolute angle per ink ignores this control entirely. Native-resolution crop.",
+                       args.width), args.out, "benday_rosette", args.ext)
+
+    if want("benday_eras"):
+        eras = [
+            ("Craftint Golden Age", "1938-55: Y75 M45 C105, 25% dots and 50% diagonal lines"),
+            ("DC Golden Age", "as DC printed to 1969: no yellow tints, 32 colours"),
+            ("Silver Age", "acetate method: Y90 M75 C105 K45, 50% as negative dots"),
+            ("Bronze Age 70s", "cheap 70s camera: every plate at one angle, no rosette"),
+        ]
+        panels = [(name, run(preset=name)) for name, _ in eras]
+        sub = ("Four presets modelling four real printing eras, each with the screen "
+               "angles, tint calls and plate rendering that era actually used. "
+               + "  ".join(f"{n}: {d}." for n, d in eras))
+        save(make_grid(panels, "Four real printing eras", sub, args.width, cols=2),
+             args.out, "benday_eras", args.ext)
 
     print("done")
     return 0

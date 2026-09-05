@@ -52,6 +52,73 @@ is the one to use when you need type to stay sharp.
 
 ---
 
+## Why this reproduces the real process
+
+Plenty of tools can put dots on an image. What makes this one read as genuinely
+printed is that it models the separation, the screen angles and the tint calls
+the way a press actually worked.
+
+### One plate per ink
+
+![plates](images/benday_plates.jpg)
+
+The node's **second output** is the separation itself. Every ink gets its own
+plate, screened at its own angle, exactly as it would go to press, and the
+composite on the right is those plates stacked in print order. This is not a
+colour filter applied to a finished picture, it is a real separation and
+recombination, which is why overlaps behave the way ink does rather than the
+way blend modes do.
+
+### The angles are doing work
+
+![rosette](images/benday_rosette.jpg)
+
+Give every plate the same screen angle and the dots pile up on top of each
+other into a coarse, blotchy moire. Offset them and the overlaps scatter into
+the rosette that four-colour printing produces. That is the entire reason
+presses standardised on angle sets, and it is the detail most halftone filters
+skip.
+
+The comic presets carry the real historical sets rather than generic offsets:
+Y 75, M 45, C 105 for the Craftint era from the 1948 Yearbook, and Y 90, M 75,
+C 105, K 45 for the Silver Age.
+
+**Worth knowing:** an ink's own `angle` field is absolute and overrides
+`offset_angles` completely. Most presets pin their angles this way, so if you
+are turning the `offset_angles` dial on a preset and nothing is happening, that
+is why. The sweep above uses the default ink set for exactly that reason.
+
+### Four real printing eras
+
+![eras](images/benday_eras.jpg)
+
+Each of these is a preset carrying the screen angles, the tint calls and the
+plate rendering that era actually used.
+
+- **Craftint Golden Age** (1938 to 1955) prints 25 percent as dots, 50 percent
+  as diagonal lines and 100 percent as solid, which is what the Craftint
+  process offered.
+- **DC Golden Age** is the same process with yellow tints left out entirely,
+  as DC printed until 1969. That single omission drops the palette from 64
+  colours to 32 and is why Golden Age DC flesh tones look flat and pale.
+- **Silver Age** is the acetate method: no line tints at all, and the 50
+  percent tint arrives as round negative dots, holes in ink, produced from the
+  same screen at the same position.
+- **Bronze Age 70s** screens every plate at one angle, because mid-70s
+  engravers switched to a cheaper camera. No rosette, and visibly coarser
+  colour as a result.
+
+### Tint calls, not gradients
+
+A colourist could not ask for 37 percent cyan. They called a tint from a fixed
+set, which is why `tint_quantize` matters as much as the screen does. `25/50`
+gives three calls per primary plus solid, and three primaries at four levels is
+where the classic 64-colour comic palette comes from. The result is flat
+stepped fields with no gradients anywhere, which is the single strongest tell
+of the era.
+
+---
+
 ## The sliders
 
 ### `scale`

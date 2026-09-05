@@ -88,7 +88,7 @@ MAGIC_PRESETS = {
     # --- The three real comic-book eras -----------------------------------
     # Craftint Multicolor (c.1938-1955). The colourist had exactly three
     # calls per primary: 25% square-grid dots, 50% diagonal LINES, 100% solid
-    # painted in — 4 levels ^ 3 primaries = the 64-colour comic palette. Dots
+    # painted in, 4 levels ^ 3 primaries = the 64-colour comic palette. Dots
     # and lines sat in perfect register on one pre-printed board, which is
     # what plate_render "benday" reproduces. Screen angles per the 1948
     # Graphic Arts Production Yearbook: Yellow 75, Magenta 45, Cyan 105.
@@ -98,8 +98,8 @@ MAGIC_PRESETS = {
         scale=75, roughness=28, plate_drift=4.0, ink_fade=15,
         ink_multiply=85, background="#e9e0c6", tint_quantize="25/50",
         plate_render="benday", dot_gain=55),
-    # DC until 1969 left yellow tints out entirely — yellow could only print
-    # solid — halving the palette to 32 colours and making every caucasian
+    # DC until 1969 left yellow tints out entirely, yellow could only print
+    # solid, halving the palette to 32 colours and making every caucasian
     # face flat pale magenta (R2) instead of Marvel's Y2R2.
     "DC Golden Age": _p(
         [_i("#f0d92e", angle=75, solid_only=True), _i("#dd3a86", angle=45),
@@ -110,7 +110,7 @@ MAGIC_PRESETS = {
     # Silver Age acetate method (Marvel 1954, DC 1956, into the 80s). Same
     # three calls, but the 50% is no longer lines: one contact halftone screen
     # was shot twice at different exposures, so the 25% positive dots and the
-    # 50% "negative dots" come from the same screen in the same position —
+    # 50% "negative dots" come from the same screen in the same position,
     # exactly what the Euclidean dot function does across 50%.
     "Silver Age": _p(
         [_i("#f5d93a", angle=90, freq=0.85), _i("#e03a80", angle=75),
@@ -119,14 +119,14 @@ MAGIC_PRESETS = {
         ink_multiply=88, background="#eee6d2", tint_quantize="25/50",
         dot_gain=60),
     # Mid-70s the engravers switched to a cheaper camera and screened every
-    # colour at the SAME angle — no rosette, visibly coarser colour.
+    # colour at the SAME angle, no rosette, visibly coarser colour.
     "Bronze Age 70s": _p(
         [_i("#f2d54a", freq=0.85), _i("#dc4a80"), _i("#2f92c8"), _i("#26232a")],
         scale=70, roughness=30, plate_drift=5.0, ink_fade=22,
         ink_multiply=85, background="#e4d8ba", tint_quantize="25/50",
         offset_angles=0, rotate=45, dot_gain=70),
     # One plate, several screens: light tints print as dots, deep tints as a
-    # line sheet, 100% as an unscreened solid fill — the engraver's multi-mask
+    # line sheet, 100% as an unscreened solid fill, the engraver's multi-mask
     # plate. Yellow runs coarse (freq 0.6) because fine yellow tints blurred
     # away on newsprint, and the heavy inks run coarser than the black plate.
     "Ben-Day Workshop": _p(
@@ -248,7 +248,7 @@ MAGIC_PRESETS = {
         background="#17151a", dot_gain=25),
     "Crosshatch": _p(
         # Four stepped grays through the color-match solver: shadows stack
-        # multiple line directions, mids stay open — tint hats would drive
+        # multiple line directions, mids stay open, tint hats would drive
         # coverage to 1 and merge the lines into murk.
         [_i("#26231f", pattern="lines"),
          _i("#37332d", pattern="lines"),
@@ -270,50 +270,50 @@ MAGIC_PRESETS = {
 # One line per preset, shown as the gallery caption's tooltip and in the
 # panel's help strip.
 PRESET_DESC = {
-    "Vintage Poster": "Orange, teal and black broken waves on aged stock — the "
+    "Vintage Poster": "Orange, teal and black broken waves on aged stock, the "
                       "hand-pulled travel poster look.",
     "Rose Matinee": "Fine parallel wave hatching in dusty pinks on cream.",
     "Surf Poster": "Crossed broken waves, bright blue and orange on near-white.",
     "Poster Shop": "Four bold poster inks, clean dots, light misregistration.",
-    "Free of Charge": "Two-ink blue and orange riso on white — cheap and cheerful.",
+    "Free of Charge": "Two-ink blue and orange riso on white, cheap and cheerful.",
     "Strange Process": "Four odd inks through crossed waves; unstable, psychedelic.",
     "Comic CMYK": "Process CMYK with letterpress angles and Ben-Day tint calls.",
     "Golden Age Comic": "Coarse aged newsprint comic: big dots, heavy drift, warm paper.",
     "Craftint Golden Age": "The 1938-55 method: 25% dots, 50% diagonal LINES, "
                            "100% solid, angles Y75/M45/C105.",
-    "DC Golden Age": "Craftint with no yellow tints, as DC printed until 1969 — "
+    "DC Golden Age": "Craftint with no yellow tints, as DC printed until 1969: "
                      "flat pale pink flesh, 32 colours.",
     "Silver Age": "The acetate method: no lines, the 50% tint is round negative "
                   "dots from the same screen.",
     "Bronze Age 70s": "Every plate screened at the same angle, as cheap 70s "
                       "cameras did. No rosette, coarser colour.",
     "Ben-Day Workshop": "One plate carrying several screens at once, coarse "
-                        "yellow — how engravers actually worked.",
+                        "yellow, how engravers actually worked.",
     "CMYK '74": "Faded seventies process colour, wide angles, worn ink.",
     "Charles Brown": "Warm brown and gold duotone gradient map on cream.",
     "Desert Etching": "Broken line hatching, ink and burnt orange, sun-bleached.",
     "Cigar Club": "Teal, tobacco and near-black in near-parallel line hatching.",
     "Folk Festival": "Four muted earth inks, soft dots, worn paper.",
-    "Early Days": "Sage, wheat and brown, heavily faded — old field-guide print.",
+    "Early Days": "Sage, wheat and brown, heavily faded, old field-guide print.",
     "Jungle Tour": "Hot pink and greens on warm paper, clean dots.",
     "Jewel Thief": "Gold, rose and teal in flowing wave hatching.",
     "Orange Crate": "Giant opaque pop dots, white base coat on near-black stock.",
     "Gallery Stipple": "Organic coarse stipple in slate, rust and ochre.",
-    "Glam T-Shirt": "Opaque white base then pink and mint — screen print on black.",
+    "Glam T-Shirt": "Opaque white base then pink and mint, screen print on black.",
     "Newspaper": "Single black ink, fine screen, grey newsprint.",
-    "One-Pass White": "One near-white ink on dark stock — a single light pass.",
+    "One-Pass White": "One near-white ink on dark stock, a single light pass.",
     "Crosshatch": "Four stepped greys, all line screens at 45-degree steps.",
     "Hand Toned": "Mixed patterns per ink: dots, waves and cross-lines together.",
     "Sunday Funnies": "Ben-Day Sunday supplement: huge coarse tints, many tint "
                       "values, heavy off-register on cheap stock.",
     "Chain Dot Press": "The elliptical screen commercial presses moved to, run "
                        "clean and fine on white stock.",
-    "Mezzotint Plate": "Lattice-free stochastic grain, rich blacks — a roughened "
+    "Mezzotint Plate": "Lattice-free stochastic grain, rich blacks, a roughened "
                        "intaglio plate.",
     "Aquatint Sepia": "Aquatint grain in sepia and cream, soft and powdery.",
-    "Op Art Record": "Concentric rings in red and black — sixties op-art sleeve.",
+    "Op Art Record": "Concentric rings in red and black, sixties op-art sleeve.",
     "Hypnotic Spiral": "One continuous spiral in gold and near-black.",
-    "Pixel Press": "Big square dots meshing to a checkerboard — blunt and "
+    "Pixel Press": "Big square dots meshing to a checkerboard, blunt and "
                    "mechanical.",
     "8-Bit Dither": "Ordered dither in four shades of handheld green.",
     "Blueprint": "Single blue ink hatched in lines on pale drafting paper.",

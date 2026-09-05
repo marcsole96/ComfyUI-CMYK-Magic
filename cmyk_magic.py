@@ -108,7 +108,7 @@ def resolve_settings(params):
     params = dict(params)
 
     # The randomize block belongs to the node, not to any preset, so it has to
-    # be read before a preset can overwrite ink_config — otherwise choosing a
+    # be read before a preset can overwrite ink_config, otherwise choosing a
     # preset at random would erase the very shortlist that chose it.
     _m, _b, _o, _inks, rnd = _parse_cfg(params.get("ink_config", ""))
 
@@ -163,7 +163,7 @@ def resolve_settings(params):
             ink["pattern"] = rng.choice(_RANDOM_POOL)
 
     # Per-slider dice: roll the marked settings inside their own range. Done
-    # last so a seed that produces a look today keeps producing it — with no
+    # last so a seed that produces a look today keeps producing it, with no
     # diced sliders this consumes no draws from the stream at all.
     sliders = rnd.get("sliders")
     if isinstance(sliders, dict):
@@ -253,14 +253,14 @@ class CMYKMagic:
                 "plate_render": (["uniform", "benday"], {
                     "default": "uniform",
                     "tooltip": "benday: each plate carries several screens at once like a real "
-                               "Ben-Day plate — light tints as dots, deep tints as a line/hatch "
+                               "Ben-Day plate, light tints as dots, deep tints as a line/hatch "
                                "sheet, 100% as an unscreened solid fill. Pair with tint_quantize "
                                "comic_6 so the bands land on the colorist's tint calls."}),
                 "tint_quantize": (["off", "25/50", "25/50/75", "20/50", "10/20/50/70"], {
                     "default": "off",
                     "tooltip": "Snap each plate to the tint percentages a colourist could "
                                "call for (plus 0 and solid). 25/50 is what both Craftint and "
-                               "the Silver Age acetate system offered — 4 levels ^ 3 primaries "
+                               "the Silver Age acetate system offered, 4 levels ^ 3 primaries "
                                "= the 64-colour comic palette. 25/50/75 adds the call that "
                                "arrived in the early 1980s. Flat stepped fields, no gradients."}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": _SEED_MAX}),

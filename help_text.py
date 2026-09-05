@@ -34,7 +34,7 @@ HELP = {
     "dot_gain": "Ink spreading on absorbent paper, so a called tint prints "
                 "heavier than it was drawn. 0 is a calibrated press (20% inks "
                 "exactly 20%); 100 grows 20% to ~36%, the newsprint figure.",
-    "plate_drift": "Misregistration — how far each plate slips out of "
+    "plate_drift": "Misregistration, how far each plate slips out of "
                    "alignment, in pixels. The off-register colour fringing of "
                    "fast letterpress printing.",
     "offset_angles": "Degrees between each ink's screen. 30-60 gives the "
@@ -53,13 +53,13 @@ HELP = {
 
     # -------------------------------------------------------- option values
     "plate_render:uniform": "One screen per plate at every tint level. This is "
-                            "how Silver Age comics worked — the darker tints "
+                            "how Silver Age comics worked, the darker tints "
                             "come from the same dot screen printed heavier.",
     "plate_render:benday": "One plate carries several screens at once, masked "
                            "by tint level: light tints as dots, deep tints as a "
                            "line sheet, full strength as unscreened solid. The "
                            "Craftint / Golden Age method.",
-    "tint_quantize:off": "Continuous coverage — smooth gradients, like modern "
+    "tint_quantize:off": "Continuous coverage, smooth gradients, like modern "
                          "printing.",
     "tint_quantize:25/50": "The three calls Craftint and the Silver Age acetate "
                            "system offered: 25%, 50% and solid. Four levels "
@@ -68,33 +68,33 @@ HELP = {
     "tint_quantize:25/50/75": "The three classic calls plus the 75% tint that "
                               "arrived in the early 1980s.",
     "tint_quantize:20/50": "An earlier approximation of the comic tint calls.",
-    "tint_quantize:10/20/50/70": "A finer stepped set — more levels than any "
+    "tint_quantize:10/20/50/70": "A finer stepped set, more levels than any "
                                  "real comic press offered, but useful.",
 
     # ------------------------------------------------------------- patterns
     "pat:print_dots": "Euclidean halftone dots: ink grows as circles to 50%, "
-                      "then the paper becomes circles — round holes in ink. "
+                      "then the paper becomes circles, round holes in ink. "
                       "What a real contact screen does.",
     "pat:negative_dots": "The dot screen inverted: holes of ink in paper.",
     "pat:elliptical": "Chain dot. The elliptical dots touch along their long "
                       "axis first, so mid tones link into chains rather than "
-                      "every dot joining at once — presses adopted it to avoid "
+                      "every dot joining at once, presses adopted it to avoid "
                       "the visible jump in tone at 50%.",
     "pat:square_dots": "Square dots that mesh into a checkerboard at 50%. "
                        "Coarse and mechanical.",
-    "pat:bayer": "8x8 ordered dither — the threshold map early computers used "
+    "pat:bayer": "8x8 ordered dither, the threshold map early computers used "
                  "to fake greys from pure black and white. Thresholded hard, "
                  "so it stays crisp.",
     "pat:mezzotint": "Stochastic grain with no lattice at all, like an aquatint "
                      "ground. Never moirés against another plate.",
     "pat:concentric": "Rings centred on the frame.",
-    "pat:spiral": "One continuous spiral — the ring screen with its radius "
+    "pat:spiral": "One continuous spiral, the ring screen with its radius "
                   "advanced a pitch per turn, so the line never closes.",
     "pat:lines": "Straight parallel line screen. Craftint printed its 50% tint "
                  "this way.",
     "pat:broken_lines": "Line screen chopped into stitch-like dashes, as a dry "
                         "brush skips.",
-    "pat:cross_lines": "Two crossed line screens — denser hatching for shadow.",
+    "pat:cross_lines": "Two crossed line screens, denser hatching for shadow.",
     "pat:waves": "Rows that curve as continuous contours, bending into whorls "
                  "like a fingerprint.",
     "pat:broken_waves": "Curving rows broken into dashes: continuous in the "
@@ -102,7 +102,7 @@ HELP = {
     "pat:cross_waves": "Two wave screens crossed for a woven texture.",
     "pat:fan_dots": "Dots on arcs radiating from a point below the frame.",
     "pat:negative_fan": "The fan screen inverted.",
-    "pat:solid": "No screen at all — flat ink fields. Keeps type and line art "
+    "pat:solid": "No screen at all, flat ink fields. Keeps type and line art "
                  "sharp, and is how 100% areas were actually printed.",
     "pat:random": "Picks a fresh pattern from the seed on every run.",
 
@@ -116,7 +116,7 @@ HELP = {
     "background": "The paper the inks print on. Set it dark for a shirt or a "
                   "night press; the separation accounts for it.",
     "opaque_bottom": "Forces the first ink to print opaque instead of "
-                     "transparent — a solid base coat, the way white is laid "
+                     "transparent, a solid base coat, the way white is laid "
                      "down first on dark stock.",
     "palette": "Swaps the whole ink set and paper for a ready-made scheme: real "
                "process sets, riso pairs, triads and duotones.",
@@ -125,14 +125,14 @@ HELP = {
     "rnd_background": "Draw a different paper stock on every run.",
     "rnd_ink_patterns": "Give the inks random per-ink patterns on every run.",
     "adv_toggle": "Show each ink's screen angle, line frequency and solid-only "
-                  "flag — the fields presets set that are otherwise invisible.",
+                  "flag, the fields presets set that are otherwise invisible.",
     "ink_color": "This ink's colour. Order matters: the top ink prints first, "
                  "underneath the others.",
-    "ink_pattern": "Give this one ink its own screen, for mixed-pattern looks — "
+    "ink_pattern": "Give this one ink its own screen, for mixed-pattern looks: "
                    "e.g. black in cross-lines under orange waves.",
     "ink_angle": "This plate's absolute screen angle, overriding the automatic "
                  "spacing. Authentic letterpress: Y 75, M 45, C 105, K 45.",
-    "ink_freq": "Line frequency for this plate only. Below 1 is coarser — "
+    "ink_freq": "Line frequency for this plate only. Below 1 is coarser: "
                 "newsprint ran the heavy inks coarser so they would not blob.",
     "ink_solid_only": "This ink never prints a tint, only nothing or full "
                       "strength. DC left yellow tints out until 1969, which is "

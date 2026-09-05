@@ -137,7 +137,7 @@ def _lum_rgb(c):
 
 def _uv_noise(u, v, cell_u, cell_v, gen, device, octaves=2):
     """Value noise sampled in (u, v) screen coordinates with independent
-    feature sizes per axis — the anisotropy that keeps distress aligned with
+    feature sizes per axis, the anisotropy that keeps distress aligned with
     the stroke direction instead of tangling it."""
     out = torch.zeros_like(u)
     amp, total = 1.0, 0.0
@@ -196,7 +196,7 @@ def _round_dots(u, v, pitch):
 def _elliptical_dots(u, v, pitch):
     """Chain dot: an elliptical screen. The dots touch along their long axis
     well before they touch across it, so mid tones link into chains instead of
-    every dot joining its neighbours at once — the reason presses adopted it,
+    every dot joining its neighbours at once, the reason presses adopted it,
     since that simultaneous join produces a visible jump in tone at 50%."""
     return _dot_screen(u, v, pitch, lambda a, b: a * a + (b * b) / 0.42, 0.845)
 
@@ -235,7 +235,7 @@ def _flow(u, v, pitch, gen, device):
     """Wave rows as concentric curved contours: the row phase is a height
     field (directional ramp + large isotropic noise), so its level sets bend
     around the noise hills like fingerprint whorls. Small or elongated
-    displacement only wiggles straight rows — the noise term must rival the
+    displacement only wiggles straight rows, the noise term must rival the
     ramp to make rows actually curve and swirl."""
     fl = _uv_noise(u, v, pitch * 18.0, pitch * 18.0, gen, device, octaves=2)
     return u + (fl - 0.5) * pitch * 11.0
@@ -251,7 +251,7 @@ def _chop(uw, v, pitch):
 
 def screen_field(name, h, w, pitch, angle_deg, phase, roughness, gen, device):
     """Threshold field [H, W] in 0..1; higher values ink up first as coverage
-    grows. roughness (0..1) distresses the pattern *along its own axes* —
+    grows. roughness (0..1) distresses the pattern *along its own axes*,
     stroke direction survives, edges and spacing get organic."""
     yy, xx = _grid(h, w, device)
 
@@ -318,7 +318,7 @@ def screen_field(name, h, w, pitch, angle_deg, phase, roughness, gen, device):
 
     if roughness > 0:
         # Ragged ink edges: fine fiber chatter plus concentrated torn bites.
-        # Gentle symmetric noise only shifts edges sub-pixel — real letterpress
+        # Gentle symmetric noise only shifts edges sub-pixel, real letterpress
         # loses ink in chunks, so the bites are thresholded patches strong
         # enough to eat visibly into the stroke.
         fine = fractal_noise(h, w, 2.0, 2, 0.6, gen, device)
@@ -345,7 +345,7 @@ def screen_lut(s_field, pitch, bins=64, max_samples=1 << 16, hard=False):
 
     Two things make the naive `threshold at 1-cov` wrong. Screen fields are
     not uniformly distributed (a round-dot field inks ~1.77x the requested
-    area), and the anti-aliasing ramp adds area of its own — wide enough at
+    area), and the anti-aliasing ramp adds area of its own, wide enough at
     small pitch that a *blank* plate still printed ~20% gray. Measuring the
     real response and inverting it fixes both, and pinning the ends beyond
     the field range guarantees 0 coverage inks nothing and 1 inks solid.
@@ -464,7 +464,7 @@ def separate_tint(lum, paper_rgb, ink_rgbs, positions=None):
 
 # Vintage comic Ben-Day tint levels: colorists could only call for these
 # plate percentages, so every color is a combo from a ~64/128-color palette.
-# Named for the tint percentages they contain, not for an era — the same set
+# Named for the tint percentages they contain, not for an era, the same set
 # of calls spans several eras, so era names here were actively misleading.
 # 25/50 is what Craftint AND the Silver Age acetate system both offered; the
 # 75 call only arrived in the early 1980s.
@@ -482,7 +482,7 @@ TINT_LEVELS.update({
     "comic_6": TINT_LEVELS["10/20/50/70"],
 })
 
-# Inks flagged solid_only never print a tint — DC left yellow tints out of
+# Inks flagged solid_only never print a tint: DC left yellow tints out of
 # their comics until 1969, which is why their flesh is flat pink.
 SOLID_ONLY_LEVELS = (0.0, 1.0)
 
@@ -537,7 +537,7 @@ def run_cmyk_magic(image, inks, background, mode, opaque_bottom,
         covs = separate_color_match(img, paper_rgb, ink_rgbs, mults)
 
     # Snap each plate to the fixed tint calls of vintage comic separation (no
-    # continuous gradients existed — only coded percentage fields). An ink can
+    # continuous gradients existed, only coded percentage fields). An ink can
     # override the set to solids only.
     base_levels = TINT_LEVELS.get(tint_quantize)
     for i in range(len(covs)):
@@ -584,7 +584,7 @@ def run_cmyk_magic(image, inks, background, mode, opaque_bottom,
         if pat == "solid":
             ht = smoothstep(0.45, 0.55, cov)
         elif plate_render == "benday":
-            # One plate, several screens, masked by tint level — the engraver
+            # One plate, several screens, masked by tint level, the engraver
             # exposing a plate through separate Rubylith masks per pattern.
             # Craftint's three calls: 25% prints as dots, 50% as the diagonal
             # line sheet, 100% as unscreened solid. The bands are placed so the
