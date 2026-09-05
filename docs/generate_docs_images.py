@@ -170,17 +170,13 @@ def save(im, out_dir, stem, ext):
 # What to render
 # --------------------------------------------------------------------------
 
-# Documentation images get a coarser screen than you would normally print at.
-# The default scale of 60 is fine press: at README width those dots are a pixel
-# or two and the whole point of the node becomes invisible.
-SHOW_SCALE = 320
-
-# The pattern grid is the exception. A slider sweep only has to show the slider
-# moving, so a coarse screen suits it, but the pattern grid has to show what
-# each screen actually looks like: at 320 the dots grow so large that the shape
-# of the pattern swamps the picture and the finer screens stop being
-# distinguishable from one another.
-PATTERN_SCALE = 120
+# The screen used across the documentation. Coarser than the node's default of
+# 60, because at 60 the dots are a pixel or two at page width and the whole
+# point of the node is invisible. Not much coarser though: past about 200 the
+# dots start swamping the picture, faces and lettering go, and the finer
+# screens stop being distinguishable from one another.
+SHOW_SCALE = 120
+PATTERN_SCALE = SHOW_SCALE
 
 # A dozen of the 37 presets, chosen to span the families rather than to be a
 # catalogue: newsprint, the three comic eras, poster stock, and the odd ones.
@@ -306,7 +302,7 @@ def main():
     if want("patterns"):
         panels = [(n, run(pattern=n, scale=PATTERN_SCALE)) for n in PATTERNS_SHOWN]
         save(make_grid(panels, "pattern",
-                       "Twelve of the 17 screen patterns, all at the same scale so the only difference is the pattern. Rendered finer than the slider sweeps on purpose: the point here is the character of each screen, and at a coarse scale the dot size swamps it. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
+                       "Twelve of the 17 screen patterns, all at the same scale so the only difference is the pattern itself. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
                        args.width, cols=3), args.out, "patterns", args.ext)
 
     for s in SWEEPS:
@@ -387,9 +383,9 @@ def main():
             # preset would show no difference across this sweep at all.
             panels.append((f"offset_angles = {note}",
                            # A rosette is an interference pattern between dot
-                           # grids, so it needs many dots in frame. This is the
-                           # one strip that wants a finer screen, not a coarser
-                           # one.
+                           # grids, so it needs plenty of dots in frame; hence
+                           # a slightly finer screen than the rest of the docs,
+                           # and no plate drift to muddy it.
                            center_crop(run(offset_angles=v, scale=90,
                                            plate_drift=0, dot_gain=20), 0.4)))
         save(make_grid(panels, "Why the screen angles matter",
