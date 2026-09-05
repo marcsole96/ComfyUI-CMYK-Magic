@@ -1,0 +1,5 @@
+# Keep the published package small. The documentation set is ~12 MB of
+# rendered comparison images, and it is only useful on GitHub, where the
+# README and guide link to it. Everything the node needs to run is outside
+# this folder.
+docs/

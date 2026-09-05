@@ -13,18 +13,18 @@ Works with both node renderers: the classic canvas and the new Vue nodes.
 
 ## Visual guide
 
-**[Every preset, pattern, slider and randomisation control, shown on a real image](docs/guide.md)**
+**[Every preset, pattern, slider and randomisation control, shown on a real image](https://github.com/marcsole96/ComfyUI-CMYK-Magic/blob/main/docs/guide.md)**
 
-![presets](docs/images/presets.jpg)
+![presets](https://raw.githubusercontent.com/marcsole96/ComfyUI-CMYK-Magic/main/docs/images/presets.jpg)
 
-![patterns](docs/images/patterns.jpg)
+![patterns](https://raw.githubusercontent.com/marcsole96/ComfyUI-CMYK-Magic/main/docs/images/patterns.jpg)
 
 The second output is the separation itself: one plate per ink, screened at its
 own angle, stacked in print order. This is what makes it behave like ink rather
 than like a filter, and it is covered in
-[why this reproduces the real process](docs/guide.md#why-this-reproduces-the-real-process).
+[why this reproduces the real process](https://github.com/marcsole96/ComfyUI-CMYK-Magic/blob/main/docs/guide.md#why-this-reproduces-the-real-process).
 
-![one plate per ink](docs/images/benday_plates.jpg)
+![one plate per ink](https://raw.githubusercontent.com/marcsole96/ComfyUI-CMYK-Magic/main/docs/images/benday_plates.jpg)
 
 Regenerate the whole set against your own image with
 `python docs/generate_docs_images.py your_image.png`.

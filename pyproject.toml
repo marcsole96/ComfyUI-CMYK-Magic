@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-cmyk-magic"
+description = "Custom-ink halftone for ComfyUI. Pick any set of inks plus a paper colour and the node solves per pixel for the best mix of those inks, screens each plate at its own angle and stacks them in print order. 17 patterns, 37 presets, real Ben-Day plate rendering and tint calls."
+version = "1.0.0"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/marcsole96/ComfyUI-CMYK-Magic"
+
+[tool.comfy]
+PublisherId = "marcsole96"
+DisplayName = "CMYK Magic"
+Icon = "https://raw.githubusercontent.com/marcsole96/ComfyUI-CMYK-Magic/main/docs/icon.jpg"
