@@ -175,6 +175,13 @@ def save(im, out_dir, stem, ext):
 # or two and the whole point of the node becomes invisible.
 SHOW_SCALE = 320
 
+# The pattern grid is the exception. A slider sweep only has to show the slider
+# moving, so a coarse screen suits it, but the pattern grid has to show what
+# each screen actually looks like: at 320 the dots grow so large that the shape
+# of the pattern swamps the picture and the finer screens stop being
+# distinguishable from one another.
+PATTERN_SCALE = 120
+
 # A dozen of the 37 presets, chosen to span the families rather than to be a
 # catalogue: newsprint, the three comic eras, poster stock, and the odd ones.
 PRESETS_SHOWN = [
@@ -297,9 +304,9 @@ def main():
                        args.width, cols=3), args.out, "presets", args.ext)
 
     if want("patterns"):
-        panels = [(n, run(pattern=n, scale=SHOW_SCALE)) for n in PATTERNS_SHOWN]
+        panels = [(n, run(pattern=n, scale=PATTERN_SCALE)) for n in PATTERNS_SHOWN]
         save(make_grid(panels, "pattern",
-                       "Twelve of the 17 screen patterns, all at the same coarse scale so the screen itself is legible on a web page. At the default scale of 60 these are fine print and you would need to zoom in. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
+                       "Twelve of the 17 screen patterns, all at the same scale so the only difference is the pattern. Rendered finer than the slider sweeps on purpose: the point here is the character of each screen, and at a coarse scale the dot size swamps it. Dot screens, hatching, radial, and mezzotint's stochastic grain, which has no lattice at all.",
                        args.width, cols=3), args.out, "patterns", args.ext)
 
     for s in SWEEPS:
